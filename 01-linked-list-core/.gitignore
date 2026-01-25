@@ -1,0 +1,29 @@
+# ===== C build outputs =====
+*.o
+*.out
+a.out
+*.exe
+
+# ===== Executables (your compiled binary) =====
+linked_list
+main
+program
+programs
+
+# ===== Debug / core dumps =====
+core
+core.*
+
+# ===== VS Code =====
+.vscode/
+*.code-workspace
+
+# ===== OS / Editor junk =====
+*.swp
+*.swo
+*.tmp
+*~
+.DS_Store
+
+# ===== Logs =====
+*.log
