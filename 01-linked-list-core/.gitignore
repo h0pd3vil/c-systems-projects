@@ -27,3 +27,8 @@ core.*
 
 # ===== Logs =====
 *.log
+
+# build artifacts
+test
+*.o
+
