@@ -3,7 +3,26 @@
 #include "../include/linked_list.h"
 
 
+void ll_init(struct LinkedList *list)
+{
+    list->head = NULL;
+    list->size = 0;
 
+}
+
+void ll_clear(struct LinkedList *list)
+{
+    struct node *curr,*nex;
+    curr = list->head;
+    while (curr != NULL)
+    {
+        nex = curr->next;
+        free(curr);
+        curr = nex;
+    }
+    ll_init(list);
+    
+}
 
 int ll_push_back(struct LinkedList *list, int val)
 {

@@ -7,7 +7,11 @@
 int main() 
 {
     //local list of type struct LinkedList
-    struct LinkedList list = {NULL, 0};
+    //struct LinkedList list = {NULL, 0};
+
+    struct LinkedList list;
+    
+    ll_init(&list);
 
 
     int choice,val,no_of_nodes,position;
@@ -93,6 +97,7 @@ int main()
 
         case 9:
             printf("\nexec ended!");
+            ll_clear(&list);
             exit(0);
             break;
 

@@ -17,6 +17,9 @@ struct LinkedList
 
 /* ========= API FUNCTIONS ========= */
 
+void ll_init(struct LinkedList *list);
+void ll_clear(struct LinkedList *list);
+
 int ll_push_back(struct LinkedList *list, int val);
 int ll_push_front(struct LinkedList *list, int val);
 int ll_insert_at(struct LinkedList *list, int val, int pos);
