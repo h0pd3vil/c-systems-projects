@@ -5,7 +5,7 @@
 
 struct node
 {
-    int data;
+    void *data;
     struct node *next;
 };
 
@@ -20,11 +20,11 @@ struct LinkedList
 void ll_init(struct LinkedList *list);
 void ll_clear(struct LinkedList *list);
 
-int ll_push_back(struct LinkedList *list, int val);
-int ll_push_front(struct LinkedList *list, int val);
-int ll_insert_at(struct LinkedList *list, int val, int pos);
+int ll_push_back(struct LinkedList *list, void *val);
+int ll_push_front(struct LinkedList *list, void *val);
+int ll_insert_at(struct LinkedList *list, void* val, int pos);
 
-int ll_delete_value(struct LinkedList *list, int val);
+//int ll_delete_value(struct LinkedList *list, int val);   will not work now cause cant compare data
 int ll_delete_at(struct LinkedList *list, int pos);
 
 void ll_reverse(struct LinkedList *list);

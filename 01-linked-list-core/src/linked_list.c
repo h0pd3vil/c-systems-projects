@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "../include/linked_list.h"
 
@@ -24,7 +23,7 @@ void ll_clear(struct LinkedList *list)
     
 }
 
-int ll_push_back(struct LinkedList *list, int val)
+int ll_push_back(struct LinkedList *list, void *val)
 {
     struct node *tmp, *q;
     tmp = (struct node *)malloc(sizeof(struct node));
@@ -60,7 +59,7 @@ int ll_push_back(struct LinkedList *list, int val)
     
 }
 
-int ll_push_front(struct LinkedList *list, int val)
+int ll_push_front(struct LinkedList *list, void *val)
 {
     struct node *tmp;
     tmp = (struct node *)malloc(sizeof(struct node));
@@ -74,7 +73,7 @@ int ll_push_front(struct LinkedList *list, int val)
 }
 
 
-int ll_insert_at(struct LinkedList *list, int val,int pos)
+int ll_insert_at(struct LinkedList *list, void *val,int pos)
 {
     if (pos > (list->size)+1 || pos <= 0)
     {
@@ -113,17 +112,14 @@ void ll_reverse(struct LinkedList *list)
     struct node  *curr, *prev, *nex;
     prev = NULL; //storing previous address
     curr = list->head; // having current adress
-    while (curr->next != NULL)
+    while (curr != NULL)
     {
         nex = curr->next; //nex has adress of next node
         curr->next = prev; //updating current link to previous one 
         prev = curr; //updating previous as current one
         curr = nex; //since current link has been changed so going to a next link using nex
     }
-    //at last updating head
-    curr->next = prev;
-    list->head = curr;
-         
+    list->head = prev;
 }
 
 /// @brief checking if loop is present in list (using floyd algo)
@@ -149,53 +145,58 @@ int ll_has_cycle(struct LinkedList *list)
     return 0;
 }
 
-void ll_print(struct LinkedList *list)
-{
-    struct node *q;
-    q=list->head;
-    printf("\n");
-    while (q != NULL)
-    {
-        printf("%d ",q->data);
-        q=q->next;
-    }    
-}
 
-int ll_delete_value(struct LinkedList *list, int val)
-{
-    if (list->head == NULL)
-        return -1;
+//cant be implemented cause we only know about the box what inside it cant be known
 
-    struct node *q = list->head;
-    struct node *tmp;
+// void ll_print(struct LinkedList *list)
+// {
+//     struct node *q;
+//     q=list->head;
+//     printf("\n");
+//     while (q != NULL)
+//     {
+//         printf("%d ",q->data);
+//         q=q->next;
+//     }    
+// }
 
-    // Case 1: delete head
-    if (q->data == val)
-    {
-        list->head = q->next;
-        free(q);
-        list->size--;
-        return 0;
-    }
+// can't be implemented
 
-    // Find node BEFORE the one to delete
-    while (q->next != NULL && q->next->data != val)
-    {
-        q = q->next;
-    }
+// int ll_delete_value(struct LinkedList *list, void *val)
+// {
+//     if (list->head == NULL)
+//         return -1;
 
-    // Value not found
-    if (q->next == NULL)
-        return -1;
+//     struct node *q = list->head;
+//     struct node *tmp;
 
-    // Delete the node
-    tmp = q->next;
-    q->next = tmp->next;
-    free(tmp);
-    list->size--;
+//     // Case 1: delete head
+//     if (q->data == val)
+//     {
+//         list->head = q->next;
+//         free(q);
+//         list->size--;
+//         return 0;
+//     }
 
-    return 0;
-}
+//     // Find node BEFORE the one to delete
+//     while (q->next != NULL && q->next->data != val)
+//     {
+//         q = q->next;
+//     }
+
+//     // Value not found
+//     if (q->next == NULL)
+//         return -1;
+
+//     // Delete the node
+//     tmp = q->next;
+//     q->next = tmp->next;
+//     free(tmp);
+//     list->size--;
+
+//     return 0;
+// }
 
 int ll_delete_at(struct LinkedList *list, int pos)
 {
