@@ -1,9 +1,23 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include<stddef.h>
+#include <stddef.h>
 
 typedef struct Stack Stack;
+typedef struct Node  Node;
+
+
+Node
+{
+    void *data;
+    Node *link;
+};
+
+Stack
+{
+    struct node *head;
+    int size;
+};
 
 /*init && clr (lifecycles)*/
 
