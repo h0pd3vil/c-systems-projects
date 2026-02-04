@@ -44,9 +44,10 @@ void test_pop(Stack *stack)
     assert(stack->size == 0);
     int a = 5;
     int *val = malloc(sizeof(int));
-    val  = &a;
+    val  = a;
     stack_push(stack,val);
     assert(stack->size == 1);
     int *x = stack_peek(stack);
     assert(*x == 5);
+    free(val);
 }
