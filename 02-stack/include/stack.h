@@ -3,21 +3,17 @@
 
 #include <stddef.h>
 
-typedef struct Stack Stack;
-typedef struct Node  Node;
-
-
-Node
+typedef struct Node
 {
     void *data;
     Node *link;
-};
+}Node;
 
-Stack
+typedef struct Stack
 {
-    struct node *head;
+    struct Node *head;
     int size;
-};
+}Stack;
 
 /*init && clr (lifecycles)*/
 
@@ -30,7 +26,7 @@ void *stack_pop(Stack *s);
 void *stack_peek(Stack );
 
 /*helper func*/
-int stack_is_empty(const Stack *s);
+int stack_is_empty(const Stack *s); // const make it read only
 int stack_size(const Stack *s);
 
 #endif
