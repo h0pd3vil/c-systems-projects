@@ -6,18 +6,20 @@
 
 void init_stack(Stack *stack)
 {
+    if(!stack)
+        return;
     stack->head = NULL;
     stack->size = 0;
 }
 
 int clr_stack(Stack *stack)
 {
-    if(!stack || !stack->head)
+    if(!stack)
         return -1;
-    while (stack->head != NULL)
+    while (stack->size > 0)
     {
-        int *data = pop(stack);
-        free(data);
+        pop(stack);
+
     }
     return 1;   
 }
@@ -58,8 +60,12 @@ void* peek(const Stack *stack)
 
 int reverse(Stack *stack)
 {
-    if(!stack || !stack->head || !stack->head->link)
+    if(!stack)
         return -1;
+
+    if(!stack->head || !stack->head->link)
+        return 1;
+        
     Node *curr = stack->head;
     Node *nex = NULL;
     Node *pre = NULL;
