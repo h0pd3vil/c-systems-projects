@@ -1,6 +1,6 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
-#include "/home/usualguy/c-systems-projects/include/ds_errors.h"
+#include "ds_errors.h"
 
 /* ========= DATA STRUCTURES ========= */
 

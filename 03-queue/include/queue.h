@@ -1,7 +1,7 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include "/home/usualguy/c-systems-projects/include/ds_errors.h"
+#include "ds_errors.h"
 
 typedef struct Node
 {
@@ -21,9 +21,9 @@ typedef struct Queue
 ds_status_t queue_init(Queue *queue);
 ds_status_t queue_clr(Queue *queue);
 
-ds_status_t enqueue(Queue *queue, void *data);
-ds_status_t dequeue(Queue *queue, void **out_data);
-ds_status_t peek(Queue *queue, void **out_data);
+ds_status_t queue_push(Queue *queue, void *data);
+ds_status_t queue_pop(Queue *queue, void **out_data);
+ds_status_t queue_peek(const Queue *queue, void **out_data);
 
 
 

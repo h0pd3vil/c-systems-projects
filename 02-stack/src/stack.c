@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
-#include "../../02-stack/include/stack.h"
+#include "stack.h"
 
 
-ds_status_t init_stack(Stack *stack)
+ds_status_t stack_init(Stack *stack)
 {
     if(!stack)
         return DS_ERR_NULL;
@@ -14,7 +14,7 @@ ds_status_t init_stack(Stack *stack)
     return DS_OK;
 }
 
-ds_status_t clr_stack(Stack *stack)
+ds_status_t stack_clr(Stack *stack)
 {
     if(!stack)
         return DS_ERR_NULL;
@@ -22,17 +22,17 @@ ds_status_t clr_stack(Stack *stack)
     while (stack->head)
     {
         void *data;
-       ds_status_t status = pop(stack, &data);
-       if (status != DS_OK)
-       {
+        ds_status_t status = stack_pop(stack, &data);
+        if (status != DS_OK)
+        {
             return status;
-       }
+        }
        
     }
     return DS_OK;   
 }
 
-ds_status_t push(Stack *stack, void *data)
+ds_status_t stack_push(Stack *stack, void *data)
 {
     if(!stack)
         return DS_ERR_NULL;
@@ -48,15 +48,16 @@ ds_status_t push(Stack *stack, void *data)
     return DS_OK;
 }
 
-ds_status_t pop(Stack *stack, void **data)
+ds_status_t stack_pop(Stack *stack, void **data)
 {
-    if(!stack)
+    if(!stack || !data)
         return DS_ERR_NULL;
 
     if(!stack->head)
         return DS_ERR_EMPTY;
 
     Node *tmp = stack->head;
+
     *data = tmp->data;
     stack->head = tmp->link;
     stack->size--;
@@ -64,7 +65,7 @@ ds_status_t pop(Stack *stack, void **data)
     return DS_OK;
 }
 
-ds_status_t peek(const Stack *stack, void **out_data)
+ds_status_t stack_peek(const Stack *stack, void **out_data)
 {
     if(!stack)
         return DS_ERR_NULL;
@@ -76,7 +77,7 @@ ds_status_t peek(const Stack *stack, void **out_data)
     return DS_OK;
 }
 
-ds_status_t reverse(Stack *stack)
+ds_status_t stack_reverse(Stack *stack)
 {
     if(!stack)
         return DS_ERR_NULL;

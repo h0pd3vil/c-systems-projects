@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../../04-doubley-ll/include/doubly-ll.h"
+#include "doubly-ll.h"
 
 ds_status_t dll_init(List *list)
 {
@@ -81,7 +81,7 @@ ds_status_t dll_insert_at(List *list, int pos, void *val)
     if(!list)
         return DS_ERR_NULL; 
 
-    if(!list || pos < 1 || pos > list->size+1)
+    if(pos < 1 || pos > list->size+1)
         return DS_ERR_BOUNDS;
 
     //case: pos = end of list
@@ -94,7 +94,7 @@ ds_status_t dll_insert_at(List *list, int pos, void *val)
     //case: pos = start of list
     if (pos == 1)
     {
-        int code = dll_push_front(list,val);
+        ds_status_t code = dll_push_front(list,val);
         return code;
     }
 
@@ -193,6 +193,12 @@ ds_status_t dll_has_cycle(List *list, bool *result)
     if(!list || !result)
         return DS_ERR_NULL;
     
+    if(!list->head)
+    {
+        *result = false;
+        return DS_OK;
+    }    
+        
     Node *slow,*fast;
     slow = list->head;
     fast = list->head;

@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "../include/linked_list.h"
+#include "linked_list.h"
 
 
 ds_status_t ll_init(struct LinkedList *list)

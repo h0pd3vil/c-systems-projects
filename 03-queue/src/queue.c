@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "03-queue/include/queue.h"
+#include "queue.h"
 
 ds_status_t queue_init(Queue *queue)
 {
@@ -12,7 +12,7 @@ ds_status_t queue_init(Queue *queue)
     return DS_OK;
 }
 
-ds_status_t enqueue(Queue *queue,void *data)
+ds_status_t queue_push(Queue *queue,void *data)
 {
     if(!queue)
         return DS_ERR_NULL;
@@ -37,9 +37,9 @@ ds_status_t enqueue(Queue *queue,void *data)
     return DS_OK;
 }
 
-ds_status_t dequeue(Queue *queue, void **out_data)
+ds_status_t queue_pop(Queue *queue, void **out_data)
 {
-    if(!queue)
+    if(!queue || !out_data)
         return DS_ERR_NULL;
 
     if(!queue->head)
@@ -58,7 +58,7 @@ ds_status_t dequeue(Queue *queue, void **out_data)
     return DS_OK;        
 }
 
-int queue_clr(Queue *queue)
+ds_status_t queue_clr(Queue *queue)
 {
     if(!queue)
         return DS_ERR_NULL;
@@ -66,16 +66,16 @@ int queue_clr(Queue *queue)
     while (queue->head)
     {
         void *data;
-        ds_status_t status = dequeue(queue,&data);
+        ds_status_t status = queue_pop(queue,&data);
         if(status != DS_OK)
             return status;
     }
     return DS_OK;
 }
 
-ds_status_t peek(const Queue *queue, void **out_data)
+ds_status_t queue_peek(const Queue *queue, void **out_data)
 {
-    if(!queue)
+    if(!queue || !out_data)
         return DS_ERR_NULL;
 
     if (!queue->head)
