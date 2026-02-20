@@ -1,5 +1,6 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
+#include "/home/usualguy/c-systems-projects/include/ds_errors.h"
 
 /* ========= DATA STRUCTURES ========= */
 
@@ -17,18 +18,18 @@ struct LinkedList
 
 /* ========= API FUNCTIONS ========= */
 
-void ll_init(struct LinkedList *list);
-void ll_clear(struct LinkedList *list);
+ds_status_t ll_init(struct LinkedList *list);
+ds_status_t ll_clear(struct LinkedList *list);
 
-int ll_push_back(struct LinkedList *list, void *val);
-int ll_push_front(struct LinkedList *list, void *val);
-int ll_insert_at(struct LinkedList *list, void* val, int pos);
+ds_status_t ll_push_back(struct LinkedList *list, void *val);
+ds_status_t ll_push_front(struct LinkedList *list, void *val);
+ds_status_t ll_insert_at(struct LinkedList *list, void* val, int pos);
 
 //int ll_delete_value(struct LinkedList *list, int val);   will not work now cause cant compare data
-int ll_delete_at(struct LinkedList *list, int pos);
+ds_status_t ll_delete_at(struct LinkedList *list, int pos);
 
-void ll_reverse(struct LinkedList *list);
-int  ll_has_cycle(struct LinkedList *list);
-void ll_print(struct LinkedList *list);
+ds_status_t ll_reverse(struct LinkedList *list);
+ds_status_t  ll_has_cycle(struct LinkedList *list);
+//void ll_print(struct LinkedList *list);
 
 #endif

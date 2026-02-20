@@ -1,33 +1,25 @@
 #include <stdlib.h>
 #include "03-queue/include/queue.h"
 
-void queue_init(Queue *queue)
+ds_status_t queue_init(Queue *queue)
 {
+    if(!queue)
+        return DS_ERR_NULL;
+
     queue->head = NULL;
     queue->tail = NULL;
     queue->size = 0;
+    return DS_OK;
 }
 
-int queue_clr(Queue *queue)
+ds_status_t enqueue(Queue *queue,void *data)
 {
     if(!queue)
-        return -1;
-
-    while (queue->size > 0)
-    {
-        dequeue(queue); 
-    }
-    return 1;
-}
-
-int enqueue(Queue *queue,void *data)
-{
-    if(!queue)
-        return -1;
+        return DS_ERR_NULL;
     Node *tmp;
     tmp = (Node *)malloc(sizeof(Node));
     if (!tmp)
-        return -2;
+        return DS_ERR_OOM;
     
     tmp->data = data;
     tmp->link = NULL;
@@ -42,16 +34,20 @@ int enqueue(Queue *queue,void *data)
         queue->tail = tmp;
     }
     queue->size++;
-    return 1;
+    return DS_OK;
 }
 
-void* dequeue(Queue *queue)
+ds_status_t dequeue(Queue *queue, void **out_data)
 {
-    if(!queue || queue->size == 0)
-        return NULL;
+    if(!queue)
+        return DS_ERR_NULL;
+
+    if(!queue->head)
+        return DS_ERR_EMPTY;    
+    
     Node *tmp = queue->head;
     queue->head = tmp->link;
-    void *data = tmp->data;
+    *out_data = tmp->data;
     free(tmp);
     queue->size--;
     if (queue->size == 0)
@@ -59,14 +55,33 @@ void* dequeue(Queue *queue)
         queue->tail =NULL;
     }
     
-    return data;        
+    return DS_OK;        
 }
 
-void* peek(Queue *queue)
+int queue_clr(Queue *queue)
 {
-    if (!queue || queue->size == 0)
+    if(!queue)
+        return DS_ERR_NULL;
+
+    while (queue->head)
     {
-        return NULL;
+        void *data;
+        ds_status_t status = dequeue(queue,&data);
+        if(status != DS_OK)
+            return status;
     }
-    return queue->head->data;      
+    return DS_OK;
+}
+
+ds_status_t peek(const Queue *queue, void **out_data)
+{
+    if(!queue)
+        return DS_ERR_NULL;
+
+    if (!queue->head)
+    {
+        return DS_ERR_EMPTY;
+    }
+    *out_data = queue->head->data;
+    return DS_OK;      
 }

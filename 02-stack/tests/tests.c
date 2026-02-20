@@ -38,16 +38,34 @@ void test_clear(Stack *stack)
     assert(stack->head == NULL && stack->size == 0);
 }
 
+// void test_pop(Stack *stack)
+// {
+//     stack_clear(stack);
+//     assert(stack->size == 0);
+//     int a = 5;
+//     int *val = malloc(sizeof(int));
+//     *val  = a;
+//     stack_push(stack,val);
+//     assert(stack->size == 1);
+//     int *x = stack_peek(stack);
+//     assert(*x == 5);
+//     free(val);
+// }
+
 void test_pop(Stack *stack)
 {
     stack_clear(stack);
     assert(stack->size == 0);
-    int a = 5;
+
     int *val = malloc(sizeof(int));
-    val  = a;
-    stack_push(stack,val);
+    *val = 5;
+
+    stack_push(stack, val);
     assert(stack->size == 1);
-    int *x = stack_peek(stack);
-    assert(*x == 5);
-    free(val);
+
+    int *popped = stack_pop(stack);
+    assert(*popped == 5);
+    assert(stack->size == 0);
+
+    free(popped);
 }

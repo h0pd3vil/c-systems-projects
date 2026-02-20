@@ -2,15 +2,19 @@
 #include "../include/linked_list.h"
 
 
-void ll_init(struct LinkedList *list)
+ds_status_t ll_init(struct LinkedList *list)
 {
+    if(!list)
+        return DS_ERR_NULL;
     list->head = NULL;
     list->size = 0;
-
+    return DS_OK;
 }
 
-void ll_clear(struct LinkedList *list)
+ds_status_t ll_clear(struct LinkedList *list)
 {
+    if(!list)
+        return DS_ERR_NULL;
     struct node *curr,*nex;
     curr = list->head;
     while (curr != NULL)
@@ -20,17 +24,20 @@ void ll_clear(struct LinkedList *list)
         curr = nex;
     }
     ll_init(list);
-    
+    return DS_OK;   
 }
 
-int ll_push_back(struct LinkedList *list, void *val)
+ds_status_t ll_push_back(struct LinkedList *list, void *val)
 {
+    if(!list)
+        return DS_ERR_NULL;
+
     struct node *tmp, *q;
     tmp = (struct node *)malloc(sizeof(struct node));
 
     // if malloc is not able to provide memory
     if(tmp == NULL)
-        return -1;
+        return DS_ERR_OOM;
 
     (*tmp).data = val;
     tmp->next = NULL;
@@ -40,8 +47,6 @@ int ll_push_back(struct LinkedList *list, void *val)
     if(list->head == NULL)
     {
         list->head = tmp;
-        list->size++;
-        return 0;
     }
 
     //case2: list is not empty
@@ -53,46 +58,54 @@ int ll_push_back(struct LinkedList *list, void *val)
             q=q->next;
         }
         q->next = tmp;
-        list->size++;
-        return 0;
     }
-    
+
+    list->size++;
+    return DS_OK;    
 }
 
-int ll_push_front(struct LinkedList *list, void *val)
+ds_status_t ll_push_front(struct LinkedList *list, void *val)
 {
+    if(!list)
+        return DS_ERR_NULL;
+
     struct node *tmp;
     tmp = (struct node *)malloc(sizeof(struct node));
     if(tmp == NULL)
-        return -1;
+        return DS_ERR_OOM;
+
     tmp->data = val;
     tmp->next = list->head;
     list->head = tmp;
     list->size++;
-    return 0;
+    return DS_OK;
 }
 
 
-int ll_insert_at(struct LinkedList *list, void *val,int pos)
+ds_status_t ll_insert_at(struct LinkedList *list, void *val,int pos)
 {
+    if(!list)
+        return DS_ERR_NULL;
+
     if (pos > (list->size)+1 || pos <= 0)
     {
         //printf("\nplease give appropiate size: ");
-        return -1;
+        return DS_ERR_BOUNDS;
     }
 
     //case1: at front
     if (pos == 1)
     {
-        ll_push_front(list, val);
-        return 0;
+        ds_status_t code = ll_push_front(list, val);
+        return code;
     }
     
     //case2: at pos other than front
     struct node *tmp, *q;
     tmp = (struct node *)malloc(sizeof(struct node));
     if(tmp == NULL)
-        return -1;
+        return DS_ERR_OOM;
+
     q=list->head;
     for (int i = 0; i < pos-2; i++)
     {
@@ -102,13 +115,17 @@ int ll_insert_at(struct LinkedList *list, void *val,int pos)
     tmp->data = val;
     q->next = tmp;  
     list->size++;
-    return 0; 
+    return DS_OK; 
 }
 
-void ll_reverse(struct LinkedList *list)
+ds_status_t ll_reverse(struct LinkedList *list)
 {
+    if(!list)
+        return DS_ERR_NULL;
+
     if(list->head == NULL)//checking if list is empty
-        return;
+        return DS_ERR_EMPTY;
+
     struct node  *curr, *prev, *nex;
     prev = NULL; //storing previous address
     curr = list->head; // having current adress
@@ -120,13 +137,18 @@ void ll_reverse(struct LinkedList *list)
         curr = nex; //since current link has been changed so going to a next link using nex
     }
     list->head = prev;
+    return DS_OK;
 }
 
 /// @brief checking if loop is present in list (using floyd algo)
-int ll_has_cycle(struct LinkedList *list)
+ds_status_t ll_has_cycle(struct LinkedList *list)
 { 
-    if(list->head == NULL)
-        return 0;
+    if(!list)
+        return DS_ERR_NULL;
+
+    if(!list->head)
+        return DS_ERR_EMPTY;
+
     struct node *slow, *fast;
     slow = list->head;
     fast = list->head;
@@ -138,12 +160,54 @@ int ll_has_cycle(struct LinkedList *list)
         if (slow == fast)
         {
             //printf("cycle exists");
-            return -1;
+            return DS_ERR_STATE;
         }
     }
     //printf("no cycle exits");
-    return 0;
+    return DS_OK;
 }
+
+
+ds_status_t ll_delete_at(struct LinkedList *list, int pos)
+{
+    if (list == NULL)
+        return DS_ERR_NULL;
+
+    if(!list->head)
+        return DS_ERR_EMPTY;
+
+    if (pos <= 0 || pos > list->size)
+        return DS_ERR_BOUNDS;
+
+    struct node *tmp;
+
+    // Case 1: delete head
+    if (pos == 1)
+    {
+        tmp = list->head;
+        list->head = tmp->next;
+        free(tmp);
+        list->size--;
+        return DS_OK;
+    }
+
+    struct node *q = list->head;
+
+    // move to node just before the one to delete
+    for(int i = 1; i < pos - 1; i++)
+    {
+        q = q->next;
+    }
+
+    tmp = q->next;
+    q->next = tmp->next;
+    free(tmp);
+    list->size--;
+
+    return DS_OK;
+}
+
+
 
 
 //cant be implemented cause we only know about the box what inside it cant be known
@@ -197,39 +261,3 @@ int ll_has_cycle(struct LinkedList *list)
 
 //     return 0;
 // }
-
-int ll_delete_at(struct LinkedList *list, int pos)
-{
-    if (list == NULL || list->head == NULL)
-        return -1;
-
-    if (pos <= 0 || pos > list->size)
-        return -1;
-
-    struct node *tmp;
-
-    // Case 1: delete head
-    if (pos == 1)
-    {
-        tmp = list->head;
-        list->head = tmp->next;
-        free(tmp);
-        list->size--;
-        return 0;
-    }
-
-    struct node *q = list->head;
-
-    // move to node just before the one to delete
-    for(int i = 1; i < pos - 1; i++)
-    {
-        q = q->next;
-    }
-
-    tmp = q->next;
-    q->next = tmp->next;
-    free(tmp);
-    list->size--;
-
-    return 0;
-}
