@@ -1,0 +1,37 @@
+# =========================
+# C Build Artifacts
+# =========================
+*.o
+*.out
+*.exe
+*.a
+*.so
+
+# Compiled test binaries
+test_*
+*_test
+
+# Build directories
+build/
+bin/
+out/
+
+# Sanitizer / Coverage
+*.gcda
+*.gcno
+*.log
+
+# AddressSanitizer temp
+asan.log
+
+# Editor junk
+*~
+*.swp
+*.swo
+
+# IDE folders
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
