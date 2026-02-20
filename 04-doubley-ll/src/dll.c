@@ -1,20 +1,21 @@
 #include <stdlib.h>
-#include "../../04-doubley-ll/include/doubley-ll.h"
+#include <stdbool.h>
+#include "../../04-doubley-ll/include/doubly-ll.h"
 
-int dll_init(List *list)
+ds_status_t dll_init(List *list)
 {
     if(!list)
-        return -1;
+        return DS_ERR_NULL;
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
-    return 1;
+    return DS_OK;
 }
 
-int dll_clr(List *list)
+ds_status_t dll_clr(List *list)
 {
     if(!list)
-        return -1;
+        return DS_ERR_NULL;
     Node *q = list->head;
     while (q)
     {
@@ -25,17 +26,17 @@ int dll_clr(List *list)
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
-    return 1;
+    return DS_OK;
 }
 
 
-int dll_push_back(List *list, void *val)
+ds_status_t dll_push_back(List *list, void *val)
 {
     if(!list)
-        return -1;
+        return DS_ERR_NULL;
     Node *tmp = malloc(sizeof(Node));
     if(!tmp)
-        return 0;
+        return DS_ERR_OOM;
     tmp->data = val;
     tmp->nex = NULL;
 
@@ -52,16 +53,16 @@ int dll_push_back(List *list, void *val)
         list->tail = tmp;
     }
     list->size++;
-    return 1;
+    return DS_OK;
 }
 
-int dll_push_front(List *list, void *val)
+ds_status_t dll_push_front(List *list, void *val)
 {
     if(!list)
-        return -1;
+        return DS_ERR_NULL;
     Node *tmp = malloc(sizeof(Node));
     if(!tmp)
-        return 0;
+        return DS_ERR_OOM;
     tmp->data = val;
     tmp->nex = list->head;
     tmp->pre = NULL;
@@ -72,18 +73,21 @@ int dll_push_front(List *list, void *val)
     list->head = tmp;
     
     list->size++;
-    return 1;
+    return DS_OK;
 }
 
-int dll_insert_at(List *list, int pos, void *val)
+ds_status_t dll_insert_at(List *list, int pos, void *val)
 {
+    if(!list)
+        return DS_ERR_NULL; 
+
     if(!list || pos < 1 || pos > list->size+1)
-        return -1;
+        return DS_ERR_BOUNDS;
 
     //case: pos = end of list
     if(pos == list->size+1)
     {
-        int code = dll_push_back(list,val);
+        ds_status_t code = dll_push_back(list,val);
         return code;
     }
 
@@ -97,7 +101,7 @@ int dll_insert_at(List *list, int pos, void *val)
     ///case: at other position
     Node *tmp = malloc(sizeof(Node));
     if(!tmp)
-        return 0;
+        return DS_ERR_OOM;
     tmp->data = val;
     Node *q = list->head;
     for (int i = 1; i < pos-1; i++)
@@ -109,13 +113,20 @@ int dll_insert_at(List *list, int pos, void *val)
     q->nex = tmp;           //updating pre node nex
     tmp->nex->pre = tmp;    //updating nex node pre part
     list->size++;
-    return 1;   
+    return DS_OK;   
 }
 
-int dll_delete_at(List *list, int pos)
+ds_status_t dll_delete_at(List *list, int pos)
 {
-    if(!list || pos > list->size || pos < 1)
-        return -1;
+    if(!list)
+        return DS_ERR_NULL;
+
+    if(!list->head)
+        return DS_ERR_EMPTY;
+
+    if(pos < 1 || pos > list->size)
+        return DS_ERR_BOUNDS;    
+    
     Node *q = list->head;
     for(int i = 1; i < pos; i++)
     {
@@ -146,15 +157,17 @@ int dll_delete_at(List *list, int pos)
 
     free(q);
     list->size--;
-    return 1;
+    return DS_OK;
 
 }
 
-int dll_reverse(List *list)
+ds_status_t dll_reverse(List *list)
 {
-    if(!list || !list->head)
-        return -1;
+    if(!list)
+        return DS_ERR_NULL;
 
+    if(!list->head)
+        return DS_ERR_EMPTY;    
     //doesnt needed
     // if(list->head->nex == NULL)
     //     return 1;
@@ -172,13 +185,14 @@ int dll_reverse(List *list)
     tmp = list->head;
     list->head = list->tail;
     list->tail = tmp;
-    return 1;
+    return DS_OK;
 }
 
-int dll_has_cycle(List *list)
+ds_status_t dll_has_cycle(List *list, bool *result)
 {
-    if(!list)
-        return -1;
+    if(!list || !result)
+        return DS_ERR_NULL;
+    
     Node *slow,*fast;
     slow = list->head;
     fast = list->head;
@@ -186,11 +200,11 @@ int dll_has_cycle(List *list)
     {
         slow = slow->nex;
         fast = fast->nex->nex;
-        if (slow == fast)
-        {
-            return 1;
-        }
+        *result = slow == fast;
+        if(*result)
+            return DS_OK;
         
     }
-    return 0;
+    *result = false;
+    return DS_OK;
 }
